@@ -18,8 +18,10 @@
 
 #### Author
 
-   Originally by Eric Hammond.
+   Originally by Eric Hammond.  Modified by Eric Lubow.
 
 #### Website
 
    https://launchpad.net/ec2-consistent-snapshot
+
+   Examples are in a blog post available here: http://eric.lubow.org/2011/databases/mongodb/ec2-consistent-snapshot-with-mongo/
