@@ -3,7 +3,14 @@
    This is a fork of the original ec2-consistent-snapshot written by Eric Hammond.
 
    The difference is that this version has support for MongoDB.
+### Installation
+    On Ubuntu Lucid EC2 instance:
 
+    sudo apt-get -y install build-essential libio-socket-ssl-perl libdatetime-perl 
+    sudo PERL_MM_USE_DEFAULT=1 cpan -fi MongoDB MongoDB::Admin
+
+    Copy this ec2-consistent-snapshot to /usr/bin/ replacing old file.
+     
 ### Usage
 
    Below is an example command for snapshotting Mongo.  It will lock and fsync the DB, take the snapshot, and then unlock it.  You can add a _--stop_ to have Mongo restart afterwards.
