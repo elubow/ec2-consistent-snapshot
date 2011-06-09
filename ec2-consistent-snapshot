@@ -9,6 +9,7 @@ use Getopt::Long;
 use Pod::Usage;
 use File::Slurp;
 use IO::Socket::SSL;
+eval 'use Mozilla::CA';
 use Time::HiRes qw(ualarm usleep);
 use Net::Amazon::EC2 0.11;
 use POSIX ':signal_h';
@@ -49,6 +50,7 @@ my $snapshot_timeout           = 10.0; # seconds
 my $lock_timeout               =  0.5; # seconds
 my $lock_tries                 = 60;
 my $lock_sleep                 =  5.0; # seconds
+my $init_script                = '/etc/init.d/mongodb';
 
 Getopt::Long::config('no_ignore_case');
 GetOptions(
@@ -84,6 +86,7 @@ GetOptions(
   'lock-timeout=s'               => \$lock_timeout,
   'lock-tries=s'                 => \$lock_tries,
   'lock-sleep=s'                 => \$lock_sleep,
+  'init=s'                       => \$init_script,
 ) or pod2usage(2);
 
 my $xfs_filesystem_frozen = 0;
@@ -300,7 +303,7 @@ sub mongo_unlock {
 sub mongo_stop {
   $Debug and warn "$Prog: ", scalar localtime, ": mongo stop\n";
 
-  my $result = system('/etc/init.d/mongodb', 'stop');
+  my $result = system($init_script, 'stop');
 
   if ( $result != 0 ) {
     die "$Prog: Unable to stop mongod: $? $!";
@@ -312,7 +315,7 @@ sub mongo_stop {
 sub mongo_start {
   $Debug and warn "$Prog: ", scalar localtime, ": mongo start\n";
 
-  my $result = system('/etc/init.d/mongodb', 'start');
+  my $result = system($init_script, 'start');
 
   if ( $result != 0 ) {
     warn "$Prog: Unable to start mongod: $? $!";
